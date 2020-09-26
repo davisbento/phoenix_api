@@ -18,7 +18,11 @@ defmodule PhoenixApiWeb.ErrorView do
     %{errors: %{detail: message}}
   end
 
+  def render("404.json", _assigns) do
+    %{message: "Not found"}
+  end
+
   def render("422.json", %{message: message}) do
-    %{errors: message}
+    %{message: message}
   end
 end

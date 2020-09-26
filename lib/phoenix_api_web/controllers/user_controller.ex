@@ -19,7 +19,7 @@ defmodule PhoenixApiWeb.UserController do
         |> put_resp_header("location", Routes.user_path(conn, :show, user))
         |> render("show.json", user: user)
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_status(:unprocessable_entity)
         |> put_view(PhoenixApiWeb.ErrorView)
