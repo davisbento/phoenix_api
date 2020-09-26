@@ -13,16 +13,12 @@ defmodule PhoenixApiWeb.UserView do
   def render("user.json", %{user: user}) do
     %{id: user.id,
       email: user.email,
-      password: user.password,
       is_active: user.is_active}
   end
 
-  def render("sign_in.json", %{user: user}) do
+  def render("sign_in.json", %{token: token}) do
     %{
-      data: %{
-        id: user.id,
-        email: user.email
-      }
+      token: token
     }
   end
 end

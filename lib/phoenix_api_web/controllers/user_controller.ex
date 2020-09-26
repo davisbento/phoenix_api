@@ -43,11 +43,11 @@ defmodule PhoenixApiWeb.UserController do
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Auth.authenticate_user(email, password) do
-      {:ok, user} ->
+      {:ok, token} ->
         conn
         |> put_status(:ok)
         |> put_view(PhoenixApiWeb.UserView)
-        |> render("sign_in.json", user: user)
+        |> render("sign_in.json", token: token)
 
       {:error, message} ->
         conn
