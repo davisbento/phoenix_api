@@ -9,6 +9,22 @@ defmodule PhoenixApiWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  # pipeline :maybe_browser_auth do
+  #   plug(Guardian.Plug.VerifySession)
+  #   plug(Guardian.Plug.VerifyHeader, realm: "Bearer")
+  #   plug(Guardian.Plug.LoadResource)
+  # end
+
+  # pipeline :auth do
+  #   plug Guardian.Plug.Pipeline, module: PhoenixApi.GuardianSerializer,
+  #                                error_handler: PhoenixApi.AuthErrorHandler
+
+  #   plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
+  #   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
+  #   plug Guardian.Plug.EnsureAuthenticated
+  #   plug Guardian.Plug.LoadResource
+  # end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -19,11 +35,17 @@ defmodule PhoenixApiWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  scope "/api", PhoenixApiWeb do
+  scope "/api/auth", PhoenixApiWeb do
     pipe_through :api
-    resources "/users", UserController, except: [:new, :edit]
-    post "/users/sign_in", UserController, :sign_in
+
+    post "/sign_in", AuthController, :sign_in
+    post "/sign_up", AuthController, :sign_up
+  end
+
+  scope "/api/users", PhoenixApiWeb do
+    pipe_through :api
+
+    resources "/", UserController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development

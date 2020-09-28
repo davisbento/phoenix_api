@@ -104,31 +104,20 @@ defmodule PhoenixApi.Auth do
 
   def authenticate_user(email, password) do
     query = from(u in User, where: u.email == ^email)
-    query |> Repo.one() |> verify_password(password) |> generate_token()
+    query |> Repo.one() |> verify_password(password)
   end
 
   defp verify_password(nil, _) do
     # Perform a dummy check to make user enumeration more difficult
     Bcrypt.no_user_verify()
-    nil
+    {:error, "Wrong email or password"}
   end
 
   defp verify_password(user, password) do
     if Bcrypt.verify_pass(password, user.password_hash) do
-      user
+      {:ok, user}
     else
-      nil
+      {:error, "Wrong email or password"}
     end
   end
-
-  defp generate_token(nil) do
-    {:error, "Wrong email or password"}
-  end
-
-  defp generate_token(user) do
-    extra_claims = %{"user_id" => user.id}
-    token = PhoenixApi.Token.generate_and_sign!(extra_claims)
-    {:ok, token}
-  end
-
 end
