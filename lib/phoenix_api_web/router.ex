@@ -9,21 +9,9 @@ defmodule PhoenixApiWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  # pipeline :maybe_browser_auth do
-  #   plug(Guardian.Plug.VerifySession)
-  #   plug(Guardian.Plug.VerifyHeader, realm: "Bearer")
-  #   plug(Guardian.Plug.LoadResource)
-  # end
-
-  # pipeline :auth do
-  #   plug Guardian.Plug.Pipeline, module: PhoenixApi.GuardianSerializer,
-  #                                error_handler: PhoenixApi.AuthErrorHandler
-
-  #   plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
-  #   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
-  #   plug Guardian.Plug.EnsureAuthenticated
-  #   plug Guardian.Plug.LoadResource
-  # end
+  pipeline :auth do
+    plug PhoenixApi.Pipeline
+  end
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -43,7 +31,7 @@ defmodule PhoenixApiWeb.Router do
   end
 
   scope "/api/users", PhoenixApiWeb do
-    pipe_through :api
+    pipe_through [:api, :auth]
 
     resources "/", UserController, except: [:new, :edit]
   end

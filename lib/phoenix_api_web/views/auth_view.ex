@@ -1,6 +1,5 @@
 defmodule PhoenixApiWeb.AuthView do
   use PhoenixApiWeb, :view
-  alias PhoenixApiWeb.AuthView
 
   def render("show.json", %{user: user}) do
     %{id: user.id,
