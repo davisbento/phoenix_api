@@ -3,7 +3,6 @@ defmodule PhoenixApi.Pipeline do
                               module: PhoenixApi.Guardian,
                               error_handler: PhoenixApi.AuthErrorHandler
 
-  plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
   plug Guardian.Plug.VerifyHeader, claims: %{"typ" => "access"}
   plug Guardian.Plug.EnsureAuthenticated
   plug Guardian.Plug.LoadResource

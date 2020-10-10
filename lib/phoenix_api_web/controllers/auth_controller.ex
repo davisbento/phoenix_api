@@ -2,6 +2,8 @@ defmodule PhoenixApiWeb.AuthController do
   use PhoenixApiWeb, :controller
 
   alias PhoenixApi.Auth
+  alias PhoenixApi.Mailer
+  alias PhoenixApi.Email
   alias PhoenixApi.Auth.User
 
   action_fallback PhoenixApiWeb.FallbackController
@@ -9,6 +11,10 @@ defmodule PhoenixApiWeb.AuthController do
   def sign_up(conn, %{"user" => user_params}) do
     case Auth.create_user(user_params) do
       {:ok, %User{} = user} ->
+        user
+        |> Email.welcome_email()
+        |> Mailer.deliver_later()
+
         conn
         |> put_status(:created)
         |> put_resp_header("location", Routes.user_path(conn, :show, user))

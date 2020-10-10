@@ -30,6 +30,17 @@ config :phoenix_api, PhoenixApi.Guardian,
   issuer: "PhoenixApi",
   secret_key: "LiIvfw1n3+6pg4ROnvbcYMSYgEJiix4QpPjGJdFA0Tyb9HnH7FIv5cjq27iEmVkA"
 
+config :phoenix_api, PhoenixApi.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: "",
+  port: 587,
+  username: "",
+  password: "",
+  tls: true,
+  # can be `true`
+  ssl: false,
+  retries: 1
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
